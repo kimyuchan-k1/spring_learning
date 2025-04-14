@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// required Args constructor => 생성자 주입 코드 작성을 대신함.
+
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {

@@ -1,0 +1,47 @@
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/Spring_Learning.iml\" filepath=\"$PROJECT_DIR$/.idea/Spring_Learning.iml\" />\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/servlet.main.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/servlet.main.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	
++++ b/.idea/modules.xml	
+@@ -3,6 +3,10 @@
+   <component name="ProjectModuleManager">
+     <modules>
+       <module fileurl="file://$PROJECT_DIR$/.idea/Spring_Learning.iml" filepath="$PROJECT_DIR$/.idea/Spring_Learning.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core.iml" filepath="$PROJECT_DIR$/.idea/modules/core.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jpashop.iml" filepath="$PROJECT_DIR$/.idea/modules/jpashop.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jpashop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/jpashop.main.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/servlet.iml" filepath="$PROJECT_DIR$/.idea/modules/servlet.iml" />
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/servlet.main.iml" filepath="$PROJECT_DIR$/.idea/modules/servlet.main.iml" />
+     </modules>
+   </component>
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel>\r\n      <module name=\"jpashop.main\" target=\"17\" />\r\n      <module name=\"jpashop.test\" target=\"17\" />\r\n    </bytecodeTargetLevel>\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	
++++ b/.idea/compiler.xml	
+@@ -1,9 +1,14 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel>
+-      <module name="jpashop.main" target="17" />
+-      <module name="jpashop.test" target="17" />
+-    </bytecodeTargetLevel>
++    <annotationProcessing>
++      <profile name="Gradle Imported" enabled="true">
++        <outputRelativeToContentRoot value="true" />
++        <processorPath useClasspath="false">
++          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.34/ec547ef414ab1d2c040118fb9c1c265ada63af14/lombok-1.18.34.jar" />
++        </processorPath>
++        <module name="jpashop.main" />
++      </profile>
++    </annotationProcessing>
+   </component>
+ </project>
+\ No newline at end of file
