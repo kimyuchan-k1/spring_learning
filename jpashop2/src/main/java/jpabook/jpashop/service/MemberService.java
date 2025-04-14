@@ -34,6 +34,16 @@ public class MemberService {
     }
 
     /**
+     * 회원 수정
+     */
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+        // save 없이 변경감지를 통해 jpa는 update 쿼리를 날린다.
+    }
+
+    /**
      * 전체 회원 조회
      */
     public List<Member> findMembers() {
