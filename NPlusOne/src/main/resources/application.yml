@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/NplusOne
+    url: jdbc:h2:./test
     username: sa
-    password:
+    password: 1234
     driver-class-name: org.h2.Driver
 
   jpa:
@@ -13,6 +13,9 @@ spring:
         #        show_sql: true
         format_sql: true
 #        default_batch_fetch_size: 1000
+  sql:
+    init:
+      mode: always
 
 logging.level:
   org.hibernate.SQL: debug
