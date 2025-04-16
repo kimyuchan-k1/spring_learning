@@ -92,4 +92,47 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
     }
+
+
+    // 페치 조인으로 쿼리 1번에 조회
+
+    public List<Order> findAllWithMemberDelivery()  {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .getResultList();
+    }
+
+
+    /**
+     * distinct를 사용하는 이유? 1대 다 조인 있으므로 데이터베이스 row 가 증가한다.
+     * 그 결과 order 엔티티의 조회 수도 증가함. distinc를 추가해서 같은 엔티티가 조회되면 애플리케이션에서
+     * 중복을 막아준다. - order 가 컬렉션 패치조인으로 중복조회되는 것을 막아줌
+     *
+     * 단점 : 페이징 불가능
+     */
+
+    public List<Order> findAllWithTeam()     {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i",Order.class)
+                .getResultList();
+    }
+
+    // 1대 N 페이징
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        )
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
+    }
 }
