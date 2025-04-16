@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de8d2df9-bbd1-4ed6-9265-41911dbcd3c1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/jpashop/src/main/java/jpabook/jpashop/api/MemberApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/jpashop/src/main/java/jpabook/jpashop/api/MemberApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jpashop/src/main/java/jpabook/jpashop/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/jpashop/src/main/java/jpabook/jpashop/domain/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servlet/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/servlet/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="de8d2df9-bbd1-4ed6-9265-41911dbcd3c1" name="Changes" comment="remove NplusOne">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +152,17 @@
       <workItem from="1744276713056" duration="6000" />
       <workItem from="1744441377238" duration="787000" />
       <workItem from="1744608808976" duration="55000" />
+      <workItem from="1744775637548" duration="113000" />
     </task>
+    <task id="LOCAL-00001" summary="remove NplusOne">
+      <option name="closed" value="true" />
+      <created>1744775672796</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1744775672796</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,6 +178,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="remove NplusOne" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove NplusOne" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
