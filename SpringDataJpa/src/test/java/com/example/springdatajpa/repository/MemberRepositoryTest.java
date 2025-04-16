@@ -5,8 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,6 +72,36 @@ class MemberRepositoryTest {
 
 
     }
+
+    // 페이징 테스트
+    @Test
+    public void page() throws Exception {
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 10));
+        memberRepository.save(new Member("member3", 10));
+        memberRepository.save(new Member("member4", 10));
+        memberRepository.save(new Member("member5", 10));
+
+
+        //when
+        PageRequest pageRequest = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"username"));
+
+        Page<Member> page =memberRepository.findByAge(10, pageRequest);
+
+
+        //then
+        List<Member> content = page.getContent();
+
+        assertEquals(content.size(),3); // 조회된 데이터
+        assertEquals(page.getTotalElements(),5); //전체 데이터 수
+        assertEquals(page.getNumber(),0); //페이지 번호
+        assertEquals(page.getTotalPages(),2); //전체 페이지 번호
+        assertTrue(page.isFirst()); //첫 페이지 인가?
+        assertTrue(page.hasNext()); // 다음 페이지가 있는가?
+
+
+    }
+
 
 
 }
