@@ -84,23 +84,46 @@ class MemberRepositoryTest {
 
 
         //when
-        PageRequest pageRequest = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC,"username"));
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
 
-        Page<Member> page =memberRepository.findByAge(10, pageRequest);
+        Page<Member> page = memberRepository.findByAge(10, pageRequest);
 
 
         //then
         List<Member> content = page.getContent();
 
-        assertEquals(content.size(),3); // 조회된 데이터
-        assertEquals(page.getTotalElements(),5); //전체 데이터 수
-        assertEquals(page.getNumber(),0); //페이지 번호
-        assertEquals(page.getTotalPages(),2); //전체 페이지 번호
+        assertEquals(content.size(), 3); // 조회된 데이터
+        assertEquals(page.getTotalElements(), 5); //전체 데이터 수
+        assertEquals(page.getNumber(), 0); //페이지 번호
+        assertEquals(page.getTotalPages(), 2); //전체 페이지 번호
         assertTrue(page.isFirst()); //첫 페이지 인가?
         assertTrue(page.hasNext()); // 다음 페이지가 있는가?
 
-
     }
+
+
+        @Test
+        public void findMemberWithUsernameAndAge() {
+            // given - 회원이 있어야함.
+            Member member1 = new Member("AAA",10);
+            Member member2 = new Member("AAA",20);
+            memberRepository.save(member1);
+            memberRepository.save(member2);
+
+            //when - 회원 조회
+            List<Member> result = memberRepository.findByUsernameAndAgeGreaterThanEqual("AAA",15);
+
+
+            //then
+            assertEquals(result.size(),1);
+            assertEquals(result.get(0).getUsername(),member2.getUsername());
+            assertEquals(result.get(0).getAge(),20);
+            assertTrue(result.get(0).getAge() > 15);
+
+        }
+
+
+
 
 
 

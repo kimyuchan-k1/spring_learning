@@ -34,5 +34,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Page<Member> findByAge(int age, Pageable pageable);
 
 
+    //이름과 나이를 기준으로 회원 조회
+    public List<Member> findByUsernameAndAgeGreaterThanEqual(String username,int age);
+
+
 
 }
