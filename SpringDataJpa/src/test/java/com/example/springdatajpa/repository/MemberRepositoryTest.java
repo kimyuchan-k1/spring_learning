@@ -1,5 +1,6 @@
 package com.example.springdatajpa.repository;
 
+import com.example.springdatajpa.dto.MemberDto;
 import com.example.springdatajpa.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -88,6 +89,18 @@ class MemberRepositoryTest {
 
         Page<Member> page = memberRepository.findByAge(10, pageRequest);
 
+        // 페이지 유지하며 엔티티를 DTO로 변환하기
+         page.stream().forEach(m -> {
+            System.out.println("page m 이 뭘까??????????????????????????");
+            System.out.println(m);
+        });
+
+        Page<MemberDto> dtopage = page.map(m -> new MemberDto(m.getId(),m.getUsername(),null));
+
+        dtopage.stream().forEach(dto -> {
+            System.out.println("------------------------------DTO ---------------------");
+            System.out.println(dto);
+        });
 
         //then
         List<Member> content = page.getContent();
@@ -98,6 +111,8 @@ class MemberRepositoryTest {
         assertEquals(page.getTotalPages(), 2); //전체 페이지 번호
         assertTrue(page.isFirst()); //첫 페이지 인가?
         assertTrue(page.hasNext()); // 다음 페이지가 있는가?
+
+
 
     }
 
@@ -120,6 +135,23 @@ class MemberRepositoryTest {
             assertEquals(result.get(0).getAge(),20);
             assertTrue(result.get(0).getAge() > 15);
 
+        }
+
+        @Test
+        @DisplayName("벌크성 수정 쿼리 - data jpa")
+        public void bulkUpdate() throws Exception {
+            memberRepository.save(new Member("member1",10));
+            memberRepository.save(new Member("member2",19));
+            memberRepository.save(new Member("member3",20));
+            memberRepository.save(new Member("member4",21));
+            memberRepository.save(new Member("member5",40));
+
+            //when
+            int resultCount = memberRepository.bulkAgePlus(20);
+
+            //then
+            assertEquals(resultCount, 3);
+            assertEquals(memberRepository.findByUsername("member3").get(0).getAge(), 21);
         }
 
 

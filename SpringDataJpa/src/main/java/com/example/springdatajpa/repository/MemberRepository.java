@@ -5,6 +5,7 @@ import com.example.springdatajpa.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -46,6 +47,15 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query(value = "select m from Member m",
     countQuery = "select count(m.username) from Member m")
     Page<Member> findMemberAllCountBy(Pageable pageable);
+
+    /**
+     *  data jpa 를 사용해 벌크성 수정 쿼리를 작성하기
+     * 주의 : 수정 , 삭제는 @Modifying 엔티티를 추가해야 예외가 발생하지 않음.
+     * 또한 벌크업 쿼리를 실행하고 나서 영속성 컨텍스트를 초기화 하기!!! 기존 값이 남아 있음.
+     */
+    @Query("update Member m set m.age = m.age +1 where m.age >= :age")
+    @Modifying(clearAutomatically = true)
+    int bulkAgePlus(@Param("age") int age);
 
 
 
