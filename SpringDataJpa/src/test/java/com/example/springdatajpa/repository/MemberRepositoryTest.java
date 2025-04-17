@@ -196,6 +196,10 @@ class MemberRepositoryTest {
 
         }
 
+        // 지연로딩 X - 패치조인 테스트
+        List<Member> result = memberRepository.findMemberEntityGraphWithNamed();
+        // 로그확인하면 패치조인으로 한번에 sql 로 조회하는 것을 확인할 수 있다.
+
 
 
 
