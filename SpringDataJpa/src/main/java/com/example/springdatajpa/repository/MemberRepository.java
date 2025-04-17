@@ -42,6 +42,11 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     List<Member> findByNames(@Param("names") List<String> names);
 
 
+    //count 쿼리 분리하기
+    @Query(value = "select m from Member m",
+    countQuery = "select count(m.username) from Member m")
+    Page<Member> findMemberAllCountBy(Pageable pageable);
+
 
 
 }
