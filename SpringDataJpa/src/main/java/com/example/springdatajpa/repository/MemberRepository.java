@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepositoryCustom {
 
 
     // NamedQuery 사용하기 - username 파라미터에 username 인수를 넣고 Member를 자동으로 찾는다.
