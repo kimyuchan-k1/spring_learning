@@ -196,8 +196,28 @@ class MemberRepositoryTest {
 
         }
 
+        // 지연로딩 X - 패치조인 테스트
+        List<Member> result = memberRepository.findMemberEntityGraphWithNamed();
+        // 로그확인하면 패치조인으로 한번에 sql 로 조회하는 것을 확인할 수 있다.
+
+    }
+
+    @Test
+    @DisplayName("쿼리 힌트 테스트")
+    public void queryHint() throws Exception {
+        //given
+        memberRepository.save(new Member("member1",10));
+        em.flush();
+        em.clear();
+
+        //when
+        Member member = memberRepository.findReadonlyByUsername("member1");
+        member.setUsername("member2");
 
 
+        // 원래는 member를 영속성 컨텍스트에 저장하고 변경 된 것을 감지하여
+        // flush 할 때 update query를 날림. QueryHint 로 readonly를 설정한 member  엔티티는 업데이트 되 지않음
+        em.flush();
 
 
     }

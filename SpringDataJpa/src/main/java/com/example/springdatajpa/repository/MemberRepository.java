@@ -2,11 +2,13 @@ package com.example.springdatajpa.repository;
 
 import com.example.springdatajpa.dto.MemberDto;
 import com.example.springdatajpa.entity.Member;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -56,6 +58,44 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query("update Member m set m.age = m.age +1 where m.age >= :age")
     @Modifying(clearAutomatically = true)
     int bulkAgePlus(@Param("age") int age);
+
+
+    /**
+     * jpql 없이 패치 조인을 data jpa 로 해결하기
+     * EntityGraph 사용
+     */
+
+    // 공통 메서드 오버라이드
+    @Override
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findAll();
+
+    // JPQL + 엔티티 그래프
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")
+    List<Member> findMemberEntityGraph();
+
+
+    //메서드 이름으로 - 사실상 패치조인의 간편 버전!!!!
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findWithTeamByUsername(String username);
+
+
+    // NamedEntityGraph 사용법
+
+    @EntityGraph("Member.all")
+    @Query("select m from Member m")
+    List<Member> findMemberEntityGraphWithNamed();
+
+    //QueryHint
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+    Member findReadonlyByUsername(String username);
+
+
+
+
+
+
 
 
 
