@@ -2,6 +2,7 @@ package com.example.springdatajpa.repository;
 
 import com.example.springdatajpa.entity.Member;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -99,4 +100,24 @@ class MemberJpaRepositoryTest {
         assertEquals(totalCount,5);
     }
 
+    @Test
+    @DisplayName("findByUserNameAndAgeGreaterThan")
+    public void 회원이름_나이_회원조회하기() {
+        // given - 회원이 있어야함.
+        Member member1 = new Member("AAA",10);
+        Member member2 = new Member("AAA",20);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        //when - 회원 조회
+        List<Member> result = memberJpaRepository.findByUserNameAndAgeGreaterThan("AAA",15);
+
+
+        //then
+        assertEquals(result.size(),1);
+        assertEquals(result.get(0).getUsername(),member2.getUsername());
+        assertEquals(result.get(0).getAge(),20);
+        assertTrue(result.get(0).getAge() > 15);
+
+    }
 }
