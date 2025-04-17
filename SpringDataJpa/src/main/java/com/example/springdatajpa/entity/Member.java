@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NamedQuery(
         name = "Member.findByUsername",
-        query = "select m from Member m where m.username = username"
+        query = "select m from Member m where m.username = :username"
 )
 @ToString(of = {"id","username","age"})
 public class Member {
