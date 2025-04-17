@@ -16,7 +16,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     // NamedQuery 사용하기 - username 파라미터에 username 인수를 넣고 Member를 자동으로 찾는다.
     List<Member> findByUsername(@Param("username") String username);
 
-
+    //Query 어노테이션으로 정적 쿼리를 직접 작성하기
     @Query("select m from Member m where m.username = :username and m.age = :age")
     List<Member> findUser(@Param("username") String username, @Param("age") int age);
 
@@ -36,6 +36,11 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     //이름과 나이를 기준으로 회원 조회
     public List<Member> findByUsernameAndAgeGreaterThanEqual(String username,int age);
+
+    // in 절 사용하기
+    @Query("select m from Member m where m.username in :names")
+    List<Member> findByNames(@Param("names") List<String> names);
+
 
 
 
