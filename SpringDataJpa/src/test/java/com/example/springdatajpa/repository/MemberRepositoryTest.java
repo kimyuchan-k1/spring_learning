@@ -2,6 +2,10 @@ package com.example.springdatajpa.repository;
 
 import com.example.springdatajpa.dto.MemberDto;
 import com.example.springdatajpa.entity.Member;
+import com.example.springdatajpa.entity.Team;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,12 @@ class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    TeamRepository teamRepository;
+
+    @PersistenceContext
+    EntityManager em;
+
     @Test
     @DisplayName("테스트#1: 멤버 등록하고 찾기")
     public void findMember() {
@@ -37,8 +47,8 @@ class MemberRepositoryTest {
 
         assertNotNull(savedMember);
         assertNotNull(findMember);
-        assertEquals(savedMember.getId(),findMember.getId());
-        assertEquals(savedMember.getUsername(),findMember.getUsername());
+        assertEquals(savedMember.getId(), findMember.getId());
+        assertEquals(savedMember.getUsername(), findMember.getUsername());
 
     }
 
@@ -53,13 +63,13 @@ class MemberRepositoryTest {
         Member findMember1 = memberRepository.findById(member1.getId()).get();
         Member findMember2 = memberRepository.findById(member2.getId()).get();
 
-        assertEquals(findMember1,member1);
-        assertEquals(findMember2,member2);
+        assertEquals(findMember1, member1);
+        assertEquals(findMember2, member2);
 
         // 전체 조회 검증
 
         List<Member> all = memberRepository.findAll();
-        assertEquals(all.size(),2);
+        assertEquals(all.size(), 2);
 
         // 삭제 검증
 
@@ -68,8 +78,7 @@ class MemberRepositoryTest {
 
 
         long deletedCount = memberRepository.count();
-        assertEquals(deletedCount,0);
-
+        assertEquals(deletedCount, 0);
 
 
     }
@@ -90,12 +99,12 @@ class MemberRepositoryTest {
         Page<Member> page = memberRepository.findByAge(10, pageRequest);
 
         // 페이지 유지하며 엔티티를 DTO로 변환하기
-         page.stream().forEach(m -> {
+        page.stream().forEach(m -> {
             System.out.println("page m 이 뭘까??????????????????????????");
             System.out.println(m);
         });
 
-        Page<MemberDto> dtopage = page.map(m -> new MemberDto(m.getId(),m.getUsername(),null));
+        Page<MemberDto> dtopage = page.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
 
         dtopage.stream().forEach(dto -> {
             System.out.println("------------------------------DTO ---------------------");
@@ -113,50 +122,83 @@ class MemberRepositoryTest {
         assertTrue(page.hasNext()); // 다음 페이지가 있는가?
 
 
-
     }
 
 
-        @Test
-        public void findMemberWithUsernameAndAge() {
-            // given - 회원이 있어야함.
-            Member member1 = new Member("AAA",10);
-            Member member2 = new Member("AAA",20);
-            memberRepository.save(member1);
-            memberRepository.save(member2);
+    @Test
+    public void findMemberWithUsernameAndAge() {
+        // given - 회원이 있어야함.
+        Member member1 = new Member("AAA", 10);
+        Member member2 = new Member("AAA", 20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
 
-            //when - 회원 조회
-            List<Member> result = memberRepository.findByUsernameAndAgeGreaterThanEqual("AAA",15);
+        //when - 회원 조회
+        List<Member> result = memberRepository.findByUsernameAndAgeGreaterThanEqual("AAA", 15);
 
 
-            //then
-            assertEquals(result.size(),1);
-            assertEquals(result.get(0).getUsername(),member2.getUsername());
-            assertEquals(result.get(0).getAge(),20);
-            assertTrue(result.get(0).getAge() > 15);
+        //then
+        assertEquals(result.size(), 1);
+        assertEquals(result.get(0).getUsername(), member2.getUsername());
+        assertEquals(result.get(0).getAge(), 20);
+        assertTrue(result.get(0).getAge() > 15);
+
+    }
+
+    @Test
+    @DisplayName("벌크성 수정 쿼리 - data jpa")
+    public void bulkUpdate() throws Exception {
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+        //then
+        assertEquals(resultCount, 3);
+        assertEquals(memberRepository.findByUsername("member3").get(0).getAge(), 21);
+    }
+
+    @Test
+    public void findMemberLazy() throws Exception {
+        // given
+        // member 1 -> teamA
+        // member 2 -> teamB
+        Team teamA = Team.builder().name("teamA").build();
+        Team teamB = Team.builder().name("teamB").build();
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        memberRepository.save(new Member("member1",10,teamA));
+        memberRepository.save(new Member("member2",20,teamB));
+
+        em.flush();
+        em.clear();;
+
+        // lazyLoding 전
+        List<Member> members = memberRepository.findAll();
+
+        for (Member member : members) {
+
+            String result = Hibernate.isInitialized(member.getTeam()) ? "지연로딩 !!!" : "지연로딩 전~~~~";
+            System.out.println(result);
+        }
+
+        // lazy loading 후
+        for (Member member : members) {
+            member.getTeam().getName();
+            // lazyLoading 된 건지 확인하기!
+            String result = Hibernate.isInitialized(member.getTeam()) ? "지연로딩 !!!" : "지연로딩 전~~~~";
+            System.out.println(result);
+
 
         }
 
-        @Test
-        @DisplayName("벌크성 수정 쿼리 - data jpa")
-        public void bulkUpdate() throws Exception {
-            memberRepository.save(new Member("member1",10));
-            memberRepository.save(new Member("member2",19));
-            memberRepository.save(new Member("member3",20));
-            memberRepository.save(new Member("member4",21));
-            memberRepository.save(new Member("member5",40));
-
-            //when
-            int resultCount = memberRepository.bulkAgePlus(20);
-
-            //then
-            assertEquals(resultCount, 3);
-            assertEquals(memberRepository.findByUsername("member3").get(0).getAge(), 21);
-        }
 
 
 
 
-
-
+    }
 }
