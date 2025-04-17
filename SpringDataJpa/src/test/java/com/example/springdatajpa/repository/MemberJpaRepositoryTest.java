@@ -1,6 +1,8 @@
 package com.example.springdatajpa.repository;
 
 import com.example.springdatajpa.entity.Member;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberJpaRepositoryTest {
 
     @Autowired MemberJpaRepository memberJpaRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
 
     @Test
@@ -119,5 +124,26 @@ class MemberJpaRepositoryTest {
         assertEquals(result.get(0).getAge(),20);
         assertTrue(result.get(0).getAge() > 15);
 
+    }
+
+    @Test
+    @DisplayName("벌크성 수정 쿼리 테스트")
+    public void bulkUpdate() throws Exception {
+        //given
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member2",19));
+        memberJpaRepository.save(new Member("member3",20));
+        memberJpaRepository.save(new Member("member4",21));
+        memberJpaRepository.save(new Member("member5",40));
+
+        //when
+        int resultCount = memberJpaRepository.bulkAgePlus(20);
+
+        // 실제 DB에 업데이트 한 값을 확인하려면 영속성 컨텍스트에 존재하는 member3 엔티티를 초기화해야함.
+        em.clear();
+
+        //then
+        assertEquals(resultCount, 3);
+        assertEquals(memberJpaRepository.findByUsername("member3").get(0).getAge(), 21);
     }
 }
