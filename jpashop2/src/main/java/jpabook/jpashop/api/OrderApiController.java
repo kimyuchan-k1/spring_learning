@@ -127,7 +127,7 @@ public class OrderApiController {
                 , o.getAddress())
                 , mapping(o -> new OrderItemQueryDto(o.getOrderId(),o.getItemName(),o.getOrderPrice(),o.getCount()),toList())))
                 .entrySet().stream()
-                .map(e -> new OrderQueryDto(e.getKey().getOrderId() , e.getKey().getName(), e.getKey().getOrderDate(), , e.getKey().getOrderStatus(), e.getKey().getAddress(), e.getValue()))
+                .map(e -> new OrderQueryDto(e.getKey().getOrderId() , e.getKey().getName(), e.getKey().getOrderDate() , e.getKey().getOrderStatus(), e.getKey().getAddress(), e.getValue()))
                 .collect(toList());
     }
 
