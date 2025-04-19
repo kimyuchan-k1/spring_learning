@@ -13,9 +13,14 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
 
-    @GetMapping("/members/{id}")
+    /*@GetMapping("/members/{id}")
     public String findMember(@PathVariable("id") Long id) {
         Member member = memberRepository.findById(id).get();
+        return member.getUsername();
+    }*/
+
+    @GetMapping("/members/{id}")
+    public String findMember(@PathVariable("id") Member member) {
         return member.getUsername();
     }
 }
