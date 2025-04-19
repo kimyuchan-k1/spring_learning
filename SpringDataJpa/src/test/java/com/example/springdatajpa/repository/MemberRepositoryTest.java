@@ -3,6 +3,7 @@ package com.example.springdatajpa.repository;
 import com.example.springdatajpa.dto.MemberDto;
 import com.example.springdatajpa.entity.Member;
 import com.example.springdatajpa.entity.Team;
+import com.example.springdatajpa.specification.MemberSpec;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Hibernate;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.print.Pageable;
@@ -246,6 +248,34 @@ class MemberRepositoryTest {
                 findMember.getCreatedDate());
         System.out.println("findMember.updatedDate = " +
                 findMember.getUpdatedDate());
+
+    }
+
+
+    // Specification 테스트
+
+    @Test
+    public void specBasic() throws  Exception {
+        //given
+        Team teamA = Team.builder().name("teamA").build();
+        em.persist(teamA);
+
+        Member m1 = new Member("m1",0, teamA);
+        Member m2 = new Member("m2",0, teamA);
+
+        em.persist(m1);
+        em.persist(m2);
+        em.flush();
+        em.clear();
+
+
+        //when
+        Specification<Member> spec =
+                MemberSpec.username("m1").and(MemberSpec.teamName("teamA"));
+        List<Member> result = memberRepository.findAll(spec);
+
+        //then
+        assertEquals(result.size(),1);
 
     }
 }
