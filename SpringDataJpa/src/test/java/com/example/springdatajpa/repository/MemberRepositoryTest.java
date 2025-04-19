@@ -223,4 +223,31 @@ class MemberRepositoryTest {
         List<Member> result = memberRepository.findMemberCustom();
 
     }
+
+
+    // Auditing 구현 테스트
+    @Test
+    public void JpaEventBaseEntity() throws Exception {
+        //given
+        Member member = new Member("member1");
+        memberRepository.save(member);
+
+        Thread.sleep(1000);
+        member.setUsername("member2");
+
+        em.flush();
+        em.clear();
+
+        //when
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        //then
+        System.out.println("findMember.createDate = " +
+                findMember.getCreatedDate());
+        System.out.println("findMember.updatedDate = " +
+                findMember.getUpdatedDate());
+
+    }
 }
+
+

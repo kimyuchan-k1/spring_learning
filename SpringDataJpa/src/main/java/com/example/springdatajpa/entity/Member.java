@@ -16,7 +16,7 @@ import lombok.*;
 @NamedAttributeNode("team"))
 @ToString(of = {"id","username","age"})
 @Setter
-public class Member {
+public class Member extends JpaBaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
