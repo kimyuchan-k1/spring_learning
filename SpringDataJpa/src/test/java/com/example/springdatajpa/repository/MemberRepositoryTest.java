@@ -1,11 +1,13 @@
 package com.example.springdatajpa.repository;
 
+import com.example.springdatajpa.domain.UsernameOnly;
 import com.example.springdatajpa.dto.MemberDto;
 import com.example.springdatajpa.entity.Member;
 import com.example.springdatajpa.entity.Team;
 import com.example.springdatajpa.specification.MemberSpec;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.Assertions;
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -277,6 +279,28 @@ class MemberRepositoryTest {
         //then
         assertEquals(result.size(),1);
 
+    }
+
+    @Test
+    public void projections() throws Exception {
+
+        Team teamA = Team.builder().name("teamA").build();
+        em.persist(teamA);
+
+        Member m1 = new Member("m1",0, teamA);
+        Member m2 = new Member("m2",0, teamA);
+
+        em.persist(m1);
+        em.persist(m2);
+        em.flush();
+        em.clear();
+
+        // when
+
+        List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1");
+
+        //then
+        assertEquals(result.size(),1);
     }
 }
 

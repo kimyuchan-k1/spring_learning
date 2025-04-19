@@ -1,5 +1,6 @@
 package com.example.springdatajpa.repository;
 
+import com.example.springdatajpa.domain.UsernameOnly;
 import com.example.springdatajpa.dto.MemberDto;
 import com.example.springdatajpa.entity.Member;
 import jakarta.persistence.NamedAttributeNode;
@@ -92,6 +93,7 @@ public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepo
     Member findReadonlyByUsername(String username);
 
 
+    List<UsernameOnly> findProjectionsByUsername(String username);
 
 
 
