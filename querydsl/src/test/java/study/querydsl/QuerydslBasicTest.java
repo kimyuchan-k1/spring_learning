@@ -1,6 +1,7 @@
 package study.querydsl;
 
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -147,4 +148,44 @@ public class QuerydslBasicTest {
 
     }
 
+    /**
+     * 페이징
+     * -- 자동으로 Pageable 한 pageRequest 를 생성해서 보냄.
+     */
+
+    @Test
+    public void paging() {
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1) // 0부터 시작 (zero index)
+                .limit(2) // 최대 2건
+                .fetch();
+        assertEquals(result.size(),2);
+    }
+
+    // 전체 조회건수
+
+    @Test
+    public void paging1() {
+        List<Member> content = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetch();
+
+        long total = queryFactory
+                .select(member.count())
+                .from(member)
+                .fetchOne();
+
+
+        assertEquals(content.size(), 2); // 페이징된 결과의 크기 확인
+        assertEquals(total, 4); // 전체 회원 수 확인
+
+
+
+
+    }
 }
