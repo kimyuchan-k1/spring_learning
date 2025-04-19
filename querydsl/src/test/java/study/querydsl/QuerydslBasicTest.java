@@ -13,7 +13,10 @@ import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
 import study.querydsl.entity.Team;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static study.querydsl.entity.QMember.member;
 
 @SpringBootTest
 @Transactional
@@ -21,7 +24,7 @@ public class QuerydslBasicTest {
     @PersistenceContext
     EntityManager em;
 
-    JPAQueryFactory queryFactory
+    JPAQueryFactory queryFactory;
 
     // 테스트 전 무조건 실행!!!! BeforeEach!!
     @BeforeEach
@@ -76,9 +79,8 @@ public class QuerydslBasicTest {
     public void startQuerydsl() {
         //member1 을 찾아라
         //when
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        // 멤버 테이블 선언
+        // 멤버 테이블 선언 - 별칭 지정
         QMember m = new QMember("m");
 
         Member findMember = queryFactory
@@ -88,4 +90,31 @@ public class QuerydslBasicTest {
                 .fetchOne(); //단건 조회
         assertEquals(findMember.getUsername(),"member1");
     }
+
+    // q 인스턴스를 static 으로 import 하고 사용하기
+    @Test
+    public void startQuerydsl3() {
+        Member findMember = queryFactory
+                .select(member)
+                .from(member)
+                .where(member.username.eq("member1"))
+                .fetchOne();
+        assertEquals(findMember.getUsername(),"member1");
+
+    }
+
+    /**
+     *  and 조건 사용하기 where( ~~ ,~~)  콤마가 and 역할을 대신함.
+     */
+    @Test
+    public void searchAndParam() {
+
+        List<Member> result1 = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1"), member.age.eq(10))
+                .fetch();
+
+        assertEquals(result1.size(),1);
+    }
+
 }
