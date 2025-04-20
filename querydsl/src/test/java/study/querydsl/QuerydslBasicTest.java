@@ -270,8 +270,47 @@ public class QuerydslBasicTest {
                 () -> assertEquals("member2",result.get(1).getUsername())
         );
 
-
-
-
     }
+
+    /**
+     * 세타 조인(연관관계가 없는 필드로 조인)
+     */
+
+    @Test
+    public void theta_join() throws Exception {
+        em.persist(Member.builder().username("teamA").build());
+        em.persist(Member.builder().username("teamB").build());
+
+        List<Member> result = queryFactory
+                .select(member)
+                .from(member, team)
+                .where(member.username.eq(team.name))
+                .fetch();
+        assertAll(
+                () -> assertEquals("teamA", result.get(0).getUsername()),
+                () -> assertEquals("teamB", result.get(1).getUsername())
+
+        );
+    }
+
+
+    /**
+     * on 절을 활용한 join
+     */
+
+    @Test
+    public void join_on_filtering() throws Exception {
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team,team).on(team.name.eq("teamA"))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+    }
+
+
+
 }
