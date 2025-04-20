@@ -296,6 +296,7 @@ public class QuerydslBasicTest {
 
     /**
      * on 절을 활용한 join
+     * 내부조인은 where로 해결하고 외부 조인의 경우는 join 의 필터링을 on으로 해결하자!!
      */
 
     @Test
@@ -310,6 +311,29 @@ public class QuerydslBasicTest {
             System.out.println("tuple = " + tuple);
         }
     }
+
+    /**
+     * 연관관계 없는 엔티티 외부 조인
+     * jpa 연관관계 없이 직접 테이블을 조인하는 방식 -> SQL 로 데이터를 다루는 작업
+     */
+
+    @Test
+    public void join_on_no_relation() throws Exception {
+        em.persist(Member.builder().username("teamA").build());
+        em.persist(Member.builder().username("teamB").build());
+
+        List<Tuple> result =queryFactory
+                .select(member,team)
+                .from(member)
+                .leftJoin(team)
+                .on(member.username.eq(team.name))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("t = " + tuple);
+        }
+    }
+
 
 
 

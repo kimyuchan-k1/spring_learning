@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id","name"})
 public class Team {
 
     @Id @GeneratedValue
