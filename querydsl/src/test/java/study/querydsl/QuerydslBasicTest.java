@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
+import study.querydsl.entity.QTeam;
 import study.querydsl.entity.Team;
 
 import java.util.List;
@@ -225,7 +226,12 @@ public class QuerydslBasicTest {
 
     /**
      * 팀의 이름과 각 팀의 평균 연령 구하기
+     * groupBy -> 파라미터 값 기준으로 그룹화
+     * having -> 그룹의 제약 조건
+     *
+     * join(조인 대상, 별칭으로 사용할 Q타입)
      */
+
 
     @Test
     public void group() throws Exception {
@@ -244,5 +250,28 @@ public class QuerydslBasicTest {
 
         assertEquals(teamB.get(team.name),"teamB");
         assertEquals(teamB.get(member.age.avg()),35);
+    }
+
+    //팀 A 에 소속된 모든 회원 조회
+    @Test
+    public void join() throws Exception {
+        QMember member = QMember.member;
+        QTeam team = QTeam.team;
+
+        List<Member> result = queryFactory.
+                select(member)
+                .from(member)
+                .join(member.team,team)
+                .where(team.name.eq("teamA"))
+                .fetch();
+
+        assertAll(
+                () -> assertEquals("member1", result.get(0).getUsername()),
+                () -> assertEquals("member2",result.get(1).getUsername())
+        );
+
+
+
+
     }
 }
