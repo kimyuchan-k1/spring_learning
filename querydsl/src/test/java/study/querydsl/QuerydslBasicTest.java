@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberDto;
+import study.querydsl.dto.QMemberDto;
 import study.querydsl.dto.UserDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
@@ -525,6 +526,15 @@ public class QuerydslBasicTest {
                         member.age))
                 .from(member)
                 .fetch();
+
+        // 어노테이션으로 간단히 조회 + distinct
+
+        List<MemberDto> resultWithAno = queryFactory
+                .select(new QMemberDto(member.username,member.age)).distinct()
+                .from(member)
+                .fetch();
+
+
 
     }
 
