@@ -2,6 +2,7 @@ package hello.itemservice.web.form;
 
 import hello.itemservice.domain.item.Item;
 import hello.itemservice.domain.item.ItemRepository;
+import hello.itemservice.domain.item.ItemType;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,13 @@ public class FormItemController {
         return "redirect:/form/items/{itemId}";
     }
 
+    /**
+     * ModelAttribute 의 특별한사용법
+     * Model Attribute는 컨트롤러에 있는 별도의 메서드에 적용할 수 있음.!!
+     * regions 에서 반환한 값이 모델에 담김
+     *
+     */
+
     @ModelAttribute("regions")
     public Map<String, String> regions(){
         Map<String,String> regions = new LinkedHashMap<>();
@@ -76,13 +84,13 @@ public class FormItemController {
         return regions;
     }
 
+    @ModelAttribute("itemTypes")
+    public ItemType[] itemTypes() {
+        return ItemType.values();
+    }
 
-    /**
-     * ModelAttribute 의 특별한사용법
-     * Model Attribute는 컨트롤러에 있는 별도의 메서드에 적용할 수 있음.!!
-     * regions 에서 반환한 값이 모델에 담김
-     *
-     */
+
+
 
 
 }
