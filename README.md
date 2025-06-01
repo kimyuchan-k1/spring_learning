@@ -30,5 +30,5 @@
 | `querydsl`                     | 05.10 \~ 05.15 | 실전! Querydsl                          | 
 
 >  **보충 학습**
-> 05.30 ~ now : 모던 API 개발 - Websocket , reactive API, GRPC, graphQL 등
+> 05.25 ~ now : 모던 API 개발 - Websocket , reactive API, GRPC, graphQL 등
 
