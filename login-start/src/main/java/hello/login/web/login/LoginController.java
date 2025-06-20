@@ -60,4 +60,19 @@ public class LoginController {
     }
 
 
+    @PostMapping("/logout")
+    public String logout(HttpServletResponse response) {
+        expireCookie(response,"memberId");
+        return "redirect:/";
+    }
+
+    public void expireCookie(HttpServletResponse response, String cookieName) {
+        // memberId 쿠키 이름 초기화 + 만료시간 0 으로 설정 함.
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
+
+
 }
